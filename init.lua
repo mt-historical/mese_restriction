@@ -41,7 +41,7 @@ minetest.register_on_mods_loaded(function()
 						return
 					end
 					return minetest.item_place(itemstack, placer, pointed_thing)
-				end	
+				end
 			})
 		end
 	end
