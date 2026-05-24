@@ -32,15 +32,17 @@ local mese_list = {
 
 minetest.register_on_mods_loaded(function()
 	for mesecount = 1, #mese_list do
-		if minetest.registered_items[mese_list[mesecount]] then
+		local def = core.registered_items[mese_list[mesecount]]
+		if def then
+			local on_place = def.on_place or core.item_place
 			minetest.override_item(mese_list[mesecount], {
-				on_place = function(itemstack, placer, pointed_thing)
+				on_place = function(itemstack, placer, ...)
 					local can_mess = minetest.check_player_privs(placer.get_player_name(placer), {mesemaker=true})
 					if not can_mess then
 						minetest.chat_send_player(placer:get_player_name(), "You're not allowed to use this.")
 						return
 					end
-					return minetest.item_place(itemstack, placer, pointed_thing)
+					return on_place(itemstack, placer, ...)
 				end
 			})
 		end
